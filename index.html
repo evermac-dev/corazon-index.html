@@ -186,12 +186,19 @@
     }, 2500);
 
     // ▶️ click para iniciar música (obligatorio en móviles)
-    window.addEventListener("click", () => {
-      audio.play();
+    window.addEventListener("pointerdown", asyn () => {
+     try { 
+          const audio = document.getElementById("music");  
+
+          audio.volume = 0.4;
+          await audio.play();
 
       if (!analyser) initAudio();
 
       document.getElementById("hint").style.display = "none";
+     }catch (e) {
+       console.log(e);
+     }
     });
   </script>
 
