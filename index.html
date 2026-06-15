@@ -53,9 +53,7 @@
   <div id="text">I want to know you <br> Laci ❤️</div>
   <div id="hint">Toca la pantalla para iniciar ✨</div>
   
-  <audio id="music" loop>
-    <source src="pulsebox-lofi-vlog-522887.mp3" type="audio/mp3">
-  </audio>
+  
 
   <script>
     const canvas = document.getElementById("c");
@@ -74,19 +72,19 @@
     let dataArray;
 
     // 🔊 inicializar audio visualizer
-    function initAudio() {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      const ctxAudio = new AudioContext();
-      const source = ctxAudio.createMediaElementSource(audio);
+    //function initAudio() {
+     // const AudioContext = window.AudioContext || window.webkitAudioContext;
+      //const ctxAudio = new AudioContext();
+      //const source = ctxAudio.createMediaElementSource(audio);
 
-      analyser = ctxAudio.createAnalyser();
-      analyser.fftSize = 128;
+      //analyser = ctxAudio.createAnalyser();
+      //analyser.fftSize = 128;
 
-      source.connect(analyser);
-      analyser.connect(ctxAudio.destination);
+      //source.connect(analyser);
+      //analyser.connect(ctxAudio.destination);
 
-      dataArray = new Uint8Array(analyser.frequencyBinCount);
-    }
+      //dataArray = new Uint8Array(analyser.frequencyBinCount);
+    //}
 
     // 🌟 estrellas
     let stars = [];
@@ -137,16 +135,16 @@
 
       drawStars();
 
-      let audioBoost = 0;
+      //let pulse = Math.sin(time) * 2;
 
       // 🎧 leer música
-      if (analyser) {
-        analyser.getByteFrequencyData(dataArray);
-        audioBoost = dataArray[10] / 80; // sensibilidad
-      }
+      //if (analyser) {
+        //analyser.getByteFrequencyData(dataArray);
+        //audioBoost = dataArray[10] / 80; // sensibilidad
+      //}
 
       // 💓 latido + música
-      let pulse = Math.sin(time * 2) * (2 + audioBoost * 8);
+      let pulse = Math.sin(time) * 2;
 
       particles.forEach((p, i) => {
 
@@ -187,18 +185,7 @@
 
     // ▶️ click para iniciar música (obligatorio en móviles)
     window.addEventListener("pointerdown", asyn () => {
-     try { 
-          const audio = document.getElementById("music");  
-
-          audio.volume = 0.4;
-          await audio.play();
-
-      if (!analyser) initAudio();
-
       document.getElementById("hint").style.display = "none";
-     }catch (e) {
-       console.log(e);
-     }
     });
   </script>
 
