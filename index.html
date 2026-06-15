@@ -1,152 +1,98 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8">
-  <title>❤️</title>
+<meta charset="UTF-8">
+<title>❤️</title>
 
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-      background: black;
-      font-family: Arial;
-    }
+<style>
+body {
+    margin: 0;
+    background: black;
+    overflow: hidden;
+}
 
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 
-    #text {
-      position: absolute;
-      width: 100%;
-      text-align: center;
-      top: 48%;
-      color: white;
-      font-size: 34px;
-      opacity: 0;
-      transition: 2s;
-      text-shadow: 0 0 20px red;
-    }
+#text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 32px;
+    opacity: 0;
+    transition: 2s;
+    text-shadow: 0 0 20px red;
+}
 
-    .show {
-      opacity: 1 !important;
-    }
+.show {
+    opacity: 1;
+}
 
-    #hint {
-      position: absolute;
-      width: 100%;
-      bottom: 30px;
-      text-align: center;
-      color: #aaa;
-      font-size: 14px;
-    }
-  </style>
+#hint {
+    position: absolute;
+    width: 100%;
+    bottom: 30px;
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+}
+</style>
 </head>
 
 <body>
 
-  <canvas id="c"></canvas>
+<canvas id="c"></canvas>
 
-  <div id="text">I want to know you <br> Laci ❤️</div>
-  <div id="hint">Toca la pantalla para iniciar ✨</div>
-  
-  
+<div id="text">Para ti ❤️</div>
+<div id="hint">Toca la pantalla ✨</div>
 
-  <script>
-    const canvas = document.getElementById("c");
-    const ctx = canvas.getContext("2d");
+<script>
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+const canvas = document.getElementById("c");
+const ctx = canvas.getContext("2d");
 
-    let particles = [];
-    const count = 220;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-    let audio = document.getElementById("music");
+let particles = [];
+const count = 200;
 
-    let audioData = new Uint8Array(64);
-    let analyser;
-    let dataArray;
-
-    // 🔊 inicializar audio visualizer
-    //function initAudio() {
-     // const AudioContext = window.AudioContext || window.webkitAudioContext;
-      //const ctxAudio = new AudioContext();
-      //const source = ctxAudio.createMediaElementSource(audio);
-
-      //analyser = ctxAudio.createAnalyser();
-      //analyser.fftSize = 128;
-
-      //source.connect(analyser);
-      //analyser.connect(ctxAudio.destination);
-
-      //dataArray = new Uint8Array(analyser.frequencyBinCount);
-    //}
-
-    // 🌟 estrellas
-    let stars = [];
-    for (let i = 0; i < 120; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 1.5
-      });
-    }
-
-    function heart(t) {
-      return {
+function heart(t) {
+    return {
         x: 16 * Math.pow(Math.sin(t), 3),
         y: 13 * Math.cos(t)
-          - 5 * Math.cos(2 * t)
-          - 2 * Math.cos(3 * t)
-          - Math.cos(4 * t)
-      };
-    }
+           - 5 * Math.cos(2*t)
+           - 2 * Math.cos(3*t)
+           - Math.cos(4*t)
+    };
+}
 
-    // 💥 partículas
-    for (let i = 0; i < count; i++) {
-      particles.push({
+for (let i = 0; i < count; i++) {
+    particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         tx: 0,
         ty: 0,
         speed: Math.random() * 0.04 + 0.02
-      });
-    }
+    });
+}
 
-    let time = 0;
+let time = 0;
 
-    function drawStars() {
-      ctx.fillStyle = "white";
-      for (let s of stars) {
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
+function animate() {
 
-    function animate() {
+    ctx.fillStyle = "rgba(0,0,0,0.25)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = "rgba(0,0,0,0.25)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    let pulse = Math.sin(time) * 2;
 
-      drawStars();
-
-      //let pulse = Math.sin(time) * 2;
-
-      // 🎧 leer música
-      //if (analyser) {
-        //analyser.getByteFrequencyData(dataArray);
-        //audioBoost = dataArray[10] / 80; // sensibilidad
-      //}
-
-      // 💓 latido + música
-      let pulse = Math.sin(time) * 2;
-
-      particles.forEach((p, i) => {
+    particles.forEach((p, i) => {
 
         let angle = (i / count) * Math.PI * 2;
 
@@ -157,38 +103,33 @@
         p.tx = canvas.width / 2 + h.x * scale;
         p.ty = canvas.height / 2 - h.y * scale;
 
-        p.x += (p.tx - p.x) * p.speed;
-        p.y += (p.ty - p.y) * p.speed;
+        p.x += (p.tx - p.x) * 0.05;
+        p.y += (p.ty - p.y) * 0.05;
 
-        ctx.shadowBlur = 25;
-        ctx.shadowColor = "red";
         ctx.fillStyle = "red";
-
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
         ctx.fill();
-      });
-
-      ctx.shadowBlur = 0;
-
-      time += 0.03;
-
-      requestAnimationFrame(animate);
-    }
-
-    animate();
-
-    // 💬 mensaje
-    setTimeout(() => {
-      document.getElementById("text").classList.add("show");
-    }, 2500);
-
-    // ▶️ click para iniciar música (obligatorio en móviles)
-    window.addEventListener("pointerdown", asyn () => {
-      document.getElementById("hint").style.display = "none";
     });
-  </script>
+
+    time += 0.03;
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+// mensaje
+setTimeout(() => {
+    document.getElementById("text").classList.add("show");
+}, 2500);
+
+// interacción (solo visual)
+window.addEventListener("pointerdown", () => {
+    document.getElementById("hint").style.display = "none";
+});
+
+</script>
 
 </body>
-
 </html>
